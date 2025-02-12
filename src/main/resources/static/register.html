@@ -15,7 +15,8 @@
 <div class="container">
     <h1>Registro de Usuario</h1>
     <form id="registerForm" enctype="multipart/form-data">
-        <input type="file" id="profilePicture" name="profilePicture" accept="image/jpg" required>
+        <img id="imagePreview" src="" alt="Image Preview" style="display:none; max-width: 100%; height: auto; border-radius: 5px">
+        <input type="file" id="profilePicture" name="profilePicture" accept="image/jpeg" required>
         <input type="text" id="name" name="name" placeholder="Nombre de Usuario" required>
         <input type="email" id="email" name="email" placeholder="Email" required>
         <input type="password" id="password" name="password" placeholder="Contraseña" required>
@@ -48,6 +49,18 @@
             .catch(error => {
                 document.getElementById('message').innerText = 'Error: ' + error.message;
             });
+    });
+    document.getElementById('profilePicture').addEventListener('change', function(e) {
+    var file = e.target.files[0];
+    var reader = new FileReader();
+
+    reader.onload = function(event) {
+        var imgElement = document.getElementById('imagePreview');
+        imgElement.src = event.target.result;
+        imgElement.style.display = 'block';
+    };
+
+    reader.readAsDataURL(file);
     });
 </script>
 </body>

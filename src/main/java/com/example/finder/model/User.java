@@ -2,8 +2,6 @@ package com.example.finder.model;
 
 import jakarta.persistence.*;
 
-import java.sql.Date;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/app")
@@ -20,7 +21,7 @@ public class AppController {
 
     @GetMapping("/likes")
     public String matches(Model model, Authentication authentication) {
-        List<User> likedUsers = userService.getUserByUsername(authentication.getName()).getLikedUsers();
+        Set<User> likedUsers = userService.getUserByUsername(authentication.getName()).getLikedUsers();
         model.addAttribute("likedUsers", likedUsers);
         return "likedUsers";
     }

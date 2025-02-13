@@ -1,20 +1,18 @@
 package com.example.finder.model;
 
 import jakarta.persistence.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User implements UserDetails {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(nullable = false, length = 50)
     private String name;
@@ -26,7 +24,7 @@ public class User implements UserDetails {
     private String password;
 
     @Lob
-    @Column(name = "profile_picture", columnDefinition = "LONGBLOB")
+    @Column(name = "profile_picture", columnDefinition = "LONGBLOB", nullable = false)
     private byte[] profilePicture;
 
     @ManyToMany
@@ -35,7 +33,10 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "liked_user_id")
     )
-    private List<User> likedUsers;
+    private Set<User> likedUsers = new HashSet<>();
+
+    @ManyToMany(mappedBy = "likedUsers")
+    private Set<User> likedByUsers = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
@@ -43,38 +44,40 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "disliked_user_id")
     )
-    private List<User> dislikedUsers;
+    private Set<User> dislikedUsers = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(
-            name = "user_matches",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "match_user_id")
-    )
-    private List<User> matchedUsers;
+    @ManyToMany(mappedBy = "dislikedUsers")
+    private Set<User> dislikedByUsers = new HashSet<>();
 
-    public User(Long id, String name, String email, String password, byte[] profilePicture) {
-        this.id = id;
+    @OneToMany(mappedBy = "user1", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UserMatch> matchesUser1 = new HashSet<>();
+
+    @OneToMany(mappedBy = "user2", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UserMatch> matchesUser2 = new HashSet<>();
+
+    @Transient
+    public Set<UserMatch> getAllMatches() {
+        Set<UserMatch> allMatches = new HashSet<>();
+        allMatches.addAll(matchesUser1);
+        allMatches.addAll(matchesUser2);
+        return allMatches;
+    }
+
+    public User(String name, String email, String password, byte[] profilePicture) {
         this.name = name;
         this.email = email;
         this.password = password;
         this.profilePicture = profilePicture;
-        likedUsers = List.of();
-        dislikedUsers = List.of();
-        matchedUsers = List.of();
     }
 
     public User(){
-        likedUsers = List.of();
-        dislikedUsers = List.of();
-        matchedUsers = List.of();
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -94,18 +97,8 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
-    }
-
     public String getPassword() {
         return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return email;
     }
 
     public void setPassword(String password) {
@@ -120,28 +113,52 @@ public class User implements UserDetails {
         this.profilePicture = profilePicture;
     }
 
-    public List<User> getLikedUsers() {
+    public Set<User> getLikedUsers() {
         return likedUsers;
     }
 
-    public void setLikedUsers(List<User> likedUsers) {
+    public void setLikedUsers(Set<User> likedUsers) {
         this.likedUsers = likedUsers;
     }
 
-    public List<User> getDislikedUsers() {
+    public Set<User> getLikedByUsers() {
+        return likedByUsers;
+    }
+
+    public void setLikedByUsers(Set<User> likedByUsers) {
+        this.likedByUsers = likedByUsers;
+    }
+
+    public Set<User> getDislikedUsers() {
         return dislikedUsers;
     }
 
-    public void setDislikedUsers(List<User> dislikedUsers) {
+    public void setDislikedUsers(Set<User> dislikedUsers) {
         this.dislikedUsers = dislikedUsers;
     }
 
-    public List<User> getMatchedUsers() {
-        return matchedUsers;
+    public Set<User> getDislikedByUsers() {
+        return dislikedByUsers;
     }
 
-    public void setMatchedUsers(List<User> matchedUsers) {
-        this.matchedUsers = matchedUsers;
+    public void setDislikedByUsers(Set<User> dislikedByUsers) {
+        this.dislikedByUsers = dislikedByUsers;
+    }
+
+    public Set<UserMatch> getMatchesUser1() {
+        return matchesUser1;
+    }
+
+    public void setMatchesUser1(Set<UserMatch> matchesUser1) {
+        this.matchesUser1 = matchesUser1;
+    }
+
+    public Set<UserMatch> getMatchesUser2() {
+        return matchesUser2;
+    }
+
+    public void setMatchesUser2(Set<UserMatch> matchesUser2) {
+        this.matchesUser2 = matchesUser2;
     }
 
     @Override
@@ -155,4 +172,5 @@ public class User implements UserDetails {
     public int hashCode() {
         return Objects.hashCode(id);
     }
+
 }

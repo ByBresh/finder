@@ -8,7 +8,7 @@
 <h1>Usuarios con match</h1>
 <ul>
     <li th:each="user : ${likedUsers}">
-        <span th:text="${user.username}"></span>
+        <span th:text="${user.name}"></span>
     </li>
     <li><a href="/logout">Cerrar Sesión</a></li>
 </ul>

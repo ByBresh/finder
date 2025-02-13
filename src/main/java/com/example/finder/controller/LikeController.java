@@ -19,11 +19,10 @@ public class LikeController {
     @Autowired
     private UserService userService;
 
-    // TODO FIx this
     @GetMapping("/like")
-    public ResponseEntity<?> like(@RequestParam Long id, Authentication authentication) {
-        likeService.like(userService.getUserByUsername(authentication.getName()).getEmail(), id);
-        return ResponseEntity.ok("Usuario liked");
+    public ResponseEntity<?> like(@RequestParam Integer id, Authentication authentication) {
+        String response = likeService.like(userService.getUserByUsername(authentication.getName()).getEmail(), id).orElse("Usuario liked");
+        return ResponseEntity.ok(response);
     }
 
 }

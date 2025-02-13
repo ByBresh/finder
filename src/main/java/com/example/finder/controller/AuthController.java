@@ -24,7 +24,7 @@ public class AuthController {
             @RequestParam("profilePicture") MultipartFile profilePicture
             ) {
         try {
-            User newUser = userService.registerUser(new User(null, name, email, password, profilePicture.getBytes()));
+            User newUser = userService.registerUser(new User(name, email, password, profilePicture.getBytes()));
             return ResponseEntity.ok("Usuario registrado " + newUser.getName());
         } catch (RuntimeException | IOException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

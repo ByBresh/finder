@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat Interface</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <style>
+        :root {
+          --primary-color: #007BFF;
+          --secondary-color: #6c757d;
+          --background-color: #f8f9fa;
+          --sidebar-bg: #343a40;
+          --sidebar-text: #ffffff;
+          --chat-bg: #ffffff;
+          --border-color: #dee2e6;
+          --hover-color: #495057;
+        }
+        body {
+          margin: 0;
+          font-family: 'Roboto', sans-serif;
+          background-color: var(--background-color);
+          color: #212529;
+        }
+        .container {
+          display: flex;
+          height: 100vh;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        /* Sidebar styling */
+        .sidebar {
+          width: 280px;
+          background-color: var(--sidebar-bg);
+          color: var(--sidebar-text);
+          padding: 20px;
+          overflow-y: auto;
+        }
+        .sidebar h2 {
+          margin-top: 0;
+          font-size: 1.5rem;
+          border-bottom: 1px solid var(--border-color);
+          padding-bottom: 10px;
+          margin-bottom: 20px;
+        }
+        .user {
+          padding: 12px 15px;
+          margin-bottom: 8px;
+          border-radius: 4px;
+          background-color: transparent;
+          cursor: pointer;
+          transition: background-color 0.2s;
+        }
+        .user:hover {
+          background-color: var(--hover-color);
+        }
+        .user.active {
+          background-color: var(--primary-color);
+        }
+        /* Chat area styling */
+        .chat {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          background-color: var(--chat-bg);
+          max-width: 500px;
+        }
+        .chat-header {
+          padding: 20px;
+          background: linear-gradient(90deg, var(--primary-color), #0056b3);
+          color: #fff;
+          display: flex;
+          align-items: center;
+        }
+        .chat-header img {
+          aspect-ratio: 1/1;
+          width: 20%;
+          border-radius: 20%;
+          overflow: hidden;
+          object-fit: cover;
+        }
+        .chat-header h2 {
+          margin-left: 25px;
+          font-size: 1.4rem;
+        }
+        .chat-message-box {
+          flex: 1;
+          padding: 20px;
+          justify-content: space-between;
+          overflow-y: auto;
+          background-color: #fff;
+        }
+        .chat-messages {
+          list-style-type: none;
+          padding: 0;
+        }
+        .message {
+          clear: both;
+          background-color: #007BFF;
+          color: white;
+          border-radius: 20px;
+          padding: 10px;
+          width: fit-content;
+          max-width: 70%;
+          margin-bottom: 15px;
+
+          /* Word wrap */
+          overflow-wrap: break-word;
+          white-space: pre-wrap;
+        }
+        .message-own {
+          float: right;
+        }
+        .message-other {
+          float: left;
+        }
+        .chat-input {
+          padding: 15px;
+          border-top: 1px solid var(--border-color);
+          background-color: #f1f3f5;
+          display: flex;
+          align-items: center;
+        }
+        .chat-input input {
+          flex: 1;
+          padding: 12px 15px;
+          border: 1px solid var(--border-color);
+          border-radius: 20px;
+          outline: none;
+          font-size: 1rem;
+          transition: border-color 0.2s;
+        }
+        .chat-input input:focus {
+          border-color: var(--primary-color);
+        }
+        .chat-input button {
+          margin-left: 15px;
+          padding: 12px 20px;
+          border: none;
+          background-color: var(--primary-color);
+          color: #fff;
+          border-radius: 20px;
+          cursor: pointer;
+          transition: background-color 0.2s;
+        }
+        .chat-input button:hover {
+          background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Sidebar with Users List -->
+    <div class="sidebar">
+        <h2>Users</h2>
+        <div class="user active">Alice</div>
+        <div class="user">Bob</div>
+        <div class="user">Charlie</div>
+        <div class="user">Dana</div>
+        <div class="user">Eve</div>
+    </div>
+    <!-- Chat View -->
+    <div class="chat">
+        <div class="chat-header">
+            <img src="images/alice.jpg" alt="profile_picture"/>
+            <h2>Alice</h2>
+        </div>
+        <div class="chat-message-box">
+            <ul class="chat-messages">
+                <li class="message message-own">Hi there! How are you today?</li>
+                <li class="message message-other">I'm great, thanks for asking. How can I help you?</li>
+                <li class="message message-own">Example message</li>
+                <li class="message message-other">Loooooooooooooooooooooooooooooong example message</li>
+                <li class="message message-own">Loooooooooooooooooooooooooooooong example message</li>
+                <li class="message message-other">Example message</li>
+                <li class="message message-own">Example message</li>
+                <li class="message message-other">Loooooooooooooooooooooooooooooooooooooonger example message</li>
+                <li class="message message-own">Loooooooooooooooooooooooooooooooooooooonger example message</li>
+                <li class="message message-other">Example message</li>
+                <li class="message message-own">Example message</li>
+                <li class="message message-other">Example message</li>
+                <li class="message message-own">Example message</li>
+                <li class="message message-other">Example message</li>
+                <li class="message message-own">Example message</li>
+            </ul>
+        </div>
+        <div class="chat-input">
+            <input type="text" placeholder="Type your message...">
+            <button>Send</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>

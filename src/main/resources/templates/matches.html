@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Matches</title>
+    <!-- Usamos Google Fonts para un look moderno -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div th:if="${selectedMatch} != null" class="container">
+    <h2>Chat</h2>
+    <form method="post" action="">
+        <input type="text" name="message" placeholder="Di algo!" required>
+        <input type="hidden" name="matchId" th:value="${selectedMatch.id}" required>
+        <button type="submit">Enviar</button>
+    </form>
+</div>
+
+</body>
+</html>

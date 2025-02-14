@@ -31,6 +31,10 @@ public class UserMatch {
     @OneToMany(mappedBy = "userMatch", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MatchMessage> messages = new ArrayList<>();
 
+    public User getOtherUser(User user) {
+        return user.equals(user1) ? user2 : user1;
+    }
+
     public UserMatch(User user1, User user2) {
         this.id = new UserMatchId(user1.getId(), user2.getId());
         this.user1 = user1;

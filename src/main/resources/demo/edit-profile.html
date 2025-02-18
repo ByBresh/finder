@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Edit Profile - Finder</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome for icons (optional) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<header class="header">
+    <h1>Edit Profile</h1>
+</header>
+<main class="auth-app">
+    <div class="auth-card">
+        <h2>Edit Your Profile</h2>
+        <form class="auth-form">
+            <label for="profile-pic">Profile Picture</label>
+            <img id="image-preview" src="" alt="Image Preview" style="display:none; max-width: 100%; height: auto; border-radius: 10px">
+            <input type="file" id="profile-pic" accept="image/*">
+
+            <label for="name">Name</label>
+            <input type="text" id="name" value="Jane Doe" required>
+
+            <label for="bio">Bio</label>
+            <textarea id="bio" placeholder="Tell us about yourself...">Passionate traveler and artist.</textarea>
+
+            <button type="submit" class="btn auth-btn">Save Changes</button>
+
+            <button type="button" class="btn cancel-btn" onclick="window.location.href='profile.html';">Cancel</button>        </form>
+    </div>
+</main>
+</body>
+<script>
+    <!-- Change profile picture preview -->
+    document.getElementById('profile-pic').addEventListener('change', function(e) {
+    var file = e.target.files[0];
+    var reader = new FileReader();
+
+    reader.onload = function(event) {
+        var imgElement = document.getElementById('image-preview');
+        imgElement.src = event.target.result;
+        imgElement.style.display = 'block';
+    };
+
+    reader.readAsDataURL(file);
+    });
+</script>
+</html>

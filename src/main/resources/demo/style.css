@@ -1,0 +1,385 @@
+/* Global Styles */
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background: #f8f0fc; /* light purple tint */
+  color: #333;
+}
+
+/* Header */
+.header {
+  background: linear-gradient(45deg, #8e44ad, #9b59b6);
+  padding: 15px;
+  text-align: center;
+  color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.header h1 {
+  margin: 0;
+  font-size: 1.8em;
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: linear-gradient(45deg, #8e44ad, #9b59b6);
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.2);
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+.bottom-nav .nav-item {
+  color: #fff;
+  font-size: 1.8em;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+.bottom-nav .nav-item.active,
+.bottom-nav .nav-item:hover {
+  color: #f1c40f; /* gold accent */
+}
+
+/* Main App (Swipe Interface) */
+.main-app {
+  padding: 20px;
+  padding-bottom: 80px; /* space for bottom nav */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.card-container {
+  width: 90%;
+  max-width: 400px;
+  margin: 20px 0;
+  position: relative;
+}
+.card {
+  background: linear-gradient(135deg, #fff, #f1f1ff);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  transition: transform 0.3s;
+}
+.card:hover {
+  transform: scale(1.02);
+}
+.card img {
+  width: 100%;
+  display: block;
+}
+.card-info {
+  padding: 15px;
+}
+.card-info h2 {
+  margin: 0;
+  font-size: 1.6em;
+  color: #8e44ad;
+}
+.card-info p {
+  margin-top: 5px;
+  font-size: 1em;
+}
+
+/* Swipe Buttons */
+.swipe-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 20px;
+}
+.swipe-buttons .btn {
+  background-color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  font-size: 1.8em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.swipe-buttons .btn:hover {
+  transform: scale(1.1);
+}
+.btn.like {
+  color: #8e44ad;
+}
+.btn.dislike {
+  color: #e74c3c;
+}
+
+/* Matches Page Container */
+.matches-app {
+  max-width: 840px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+  height: calc(100vh - 100px - 40px);
+  display: flex;
+  flex-direction: column;
+}
+
+.matches-grid {
+  flex: 0 0 auto;
+}
+.matches-grid h2 {
+  margin: 10px 0;
+  color: #8e44ad;
+  text-align: center;
+}
+.matches-list {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  overflow-x: auto;
+  padding: 10px 0;
+}
+.match {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.match img {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 2px solid #8e44ad;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+.match img:hover {
+  transform: scale(1.1);
+}
+.match span {
+  margin-top: 5px;
+  font-size: 0.9em;
+  color: #8e44ad;
+}
+
+/* Chat Section */
+.chat-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  overflow: hidden;
+}
+
+/* Chat Window: Use no overflow here so the shadow renders correctly */
+.chat-window {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border-radius: 20px;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+.chat-window h3 {
+  margin-top: 0;
+  color: #8e44ad;
+}
+
+/* Chat Messages: scrollable area */
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  margin: 15px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.message {
+  padding: 10px 15px;
+  border-radius: 20px;
+  max-width: 70%;
+  word-wrap: break-word;
+}
+.message.sent {
+  background-color: #dcd0f5;
+  align-self: flex-end;
+  color: #4a3571;
+}
+.message.received {
+  background-color: #f1e6fa;
+  align-self: flex-start;
+  color: #333;
+}
+.chat-input {
+  display: flex;
+}
+.chat-input input[type="text"] {
+  flex: 1;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 20px 0 0 20px;
+  outline: none;
+}
+.chat-input button {
+  padding: 12px 20px;
+  border: none;
+  background-color: #8e44ad;
+  color: #fff;
+  border-radius: 0 20px 20px 0;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.chat-input button:hover {
+  background-color: #732d91;
+}
+
+/* Profile Page */
+.profile-app {
+  padding: 20px;
+  padding-bottom: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.profile-container {
+  width: 90%;
+  max-width: 400px;
+}
+.profile-card {
+  background: linear-gradient(135deg, #fff, #f1f1ff);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  transition: transform 0.3s;
+}
+.profile-card:hover {
+  transform: scale(1.02);
+}
+.profile-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.profile-card h2 {
+  margin: 10px 0;
+  color: #8e44ad;
+}
+.profile-bio {
+  padding: 0 15px;
+  margin-bottom: 15px;
+}
+.edit-profile {
+  background-color: #8e44ad;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.edit-profile:hover {
+  background-color: #732d91;
+}
+/* Optional: Add some padding around the info */
+.profile-info {
+  padding: 20px;
+  text-align: center;
+}
+.profile-info h2 {
+  margin: 10px 0;
+  color: #8e44ad;
+}
+.profile-bio {
+  margin-bottom: 15px;
+  padding: 0 15px;
+}
+.edit-profile {
+  background-color: #8e44ad;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.edit-profile:hover {
+  background-color: #732d91;
+}
+
+/* Authentication Pages (Login, Register, Edit Profile) */
+.auth-app {
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 20px;
+}
+.auth-card {
+  background: linear-gradient(135deg, #fff, #f1f1ff);
+  border-radius: 20px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  padding: 20px;
+}
+.auth-form {
+  display: flex;
+  flex-direction: column;
+}
+.auth-form label {
+  margin: 10px 0 5px;
+  font-weight: 600;
+  color: #8e44ad;
+}
+.auth-form input,
+.auth-form textarea {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  font-family: inherit;
+  font-size: 1em;
+}
+.auth-form textarea {
+  resize: vertical;
+}
+.auth-btn {
+  background-color: #8e44ad;
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.auth-btn:hover {
+  background-color: #732d91;
+}
+.auth-link {
+  text-align: center;
+  margin-top: 15px;
+}
+.auth-link a {
+  color: #8e44ad;
+  text-decoration: none;
+  font-weight: 600;
+}
+/* Cancel Button: Similar size/shape but grey */
+.cancel-btn {
+  color: #8e44ad;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s;
+}
+
+.cancel-btn:hover {
+  background-color: #ddd;  /* darker grey on hover */
+}

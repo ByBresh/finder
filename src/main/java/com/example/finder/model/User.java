@@ -17,6 +17,9 @@ public class User {
     @Column(nullable = false, length = 50)
     private String name;
 
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String description;
+
     @Column(nullable = false, unique = true)
     private String email;
 
@@ -70,7 +73,7 @@ public class User {
         this.profilePicture = profilePicture;
     }
 
-    public User(){
+    public User() {
     }
 
     public Integer getId() {
@@ -87,6 +90,14 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getEmail() {

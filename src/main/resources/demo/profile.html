@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Your Profile - Finder</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<header class="header">
+    <h1>Your Profile</h1>
+</header>
+<main class="profile-app">
+    <div class="profile-container">
+        <div class="profile-card">
+            <!-- Full-width image like the index page -->
+            <img src="images/dana.jpg" alt="Profile Picture" class="profile-img">
+            <div class="profile-info">
+                <h2>Jane Doe, 28</h2>
+                <p class="profile-bio">
+                    Passionate traveler and artist. I love exploring new places and capturing moments through my lens.
+                </p>
+                <button class="btn edit-profile" onclick="location.href='edit-profile.html'">
+                    <i class="fa-solid fa-edit"></i> Edit Profile
+                </button>
+            </div>
+        </div>
+    </div>
+</main>
+<nav class="bottom-nav">
+    <a href="index.html" class="nav-item"><i class="fa-solid fa-house"></i> Home</a>
+    <a href="matches.html" class="nav-item"><i class="fa-solid fa-comments"></i> Matches</a>
+    <a href="profile.html" class="nav-item active"><i class="fa-solid fa-user"></i> Profile</a>
+</nav>
+</body>
+</html>

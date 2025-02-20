@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Register - Finder</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<header class="header">
+    <h1>Finder</h1>
+</header>
+<main class="auth-app">
+    <div class="auth-card">
+        <h2>Create Your Profile</h2>
+        <form class="auth-form">
+            <label for="profile-pic">Profile Picture</label>
+            <img id="image-preview" src="" alt="Image Preview" style="display:none; max-width: 100%; height: auto; border-radius: 10px">
+            <input type="file" id="profile-pic" accept="image/jpeg">
+
+            <label for="name">Name</label>
+            <input type="text" id="name" placeholder="Your Name" required>
+
+            <label for="bio">Bio</label>
+            <textarea id="bio" placeholder="Tell us about yourself..."></textarea>
+
+            <button type="submit" class="btn auth-btn">Create Account</button>
+
+            <button type="button" class="btn cancel-btn" onclick="clearAndReturn()">Cancel</button>        </form>
+    </div>
+</main>
+<script>
+    // Retrieve data when page loads
+    window.addEventListener('load', function() {
+        const email = localStorage.getItem('email');
+        const password = localStorage.getItem('password');
+
+        // Redirect back to step 1 if no data is stored
+        if (!email || !password) {
+            window.location.href = 'register';
+            return;
+        }
+    });
+
+    // Profile picture preview
+    document.getElementById('profile-pic').addEventListener('change', function(e) {
+        var file = e.target.files[0];
+        var reader = new FileReader();
+
+        reader.onload = function(event) {
+            var imgElement = document.getElementById('image-preview');
+            imgElement.src = event.target.result;
+            imgElement.style.display = 'block';
+        };
+
+        reader.readAsDataURL(file);
+    });
+
+    // Handle form submission
+    document.querySelector('.auth-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const formData = new FormData();
+        formData.append('email', localStorage.getItem('email'));
+        formData.append('password', localStorage.getItem('password'));
+        formData.append('name', document.getElementById('name').value);
+        formData.append('bio', document.getElementById('bio').value);
+        formData.append('profilePicture', document.getElementById('profile-pic').files[0]);
+
+        fetch('/api/auth/register', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (response.ok) {
+                localStorage.removeItem('email');
+                localStorage.removeItem('password');
+                window.location.href = '/login';
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+
+    // Cancel button
+    function clearAndReturn() {
+        localStorage.removeItem('email');
+        localStorage.removeItem('password');
+        window.location.href = 'index';
+    }
+</script>
+</body>
+</html>

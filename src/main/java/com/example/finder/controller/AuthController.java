@@ -20,11 +20,12 @@ public class AuthController {
     public ResponseEntity<?> register(
             @RequestParam("name") String name,
             @RequestParam("email") String email,
+            @RequestParam("bio") String bio,
             @RequestParam("password") String password,
             @RequestParam("profilePicture") MultipartFile profilePicture
             ) {
         try {
-            User newUser = userService.registerUser(new User(name, email, password, profilePicture.getBytes()));
+            User newUser = userService.registerUser(new User(name, email, bio, password, profilePicture.getBytes()));
             return ResponseEntity.ok("Usuario registrado " + newUser.getName());
         } catch (RuntimeException | IOException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

@@ -8,6 +8,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -25,12 +28,13 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
-    public User loginUser(String username, String rawPassword) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Email no encontrado " + username));
-        if (!passwordEncoder.matches(rawPassword, user.getPassword()))
-            throw new RuntimeException("Contraseña incorrecta.");
-        return user;
+    public User editUser(User user, String name, String bio, MultipartFile profilePicture) throws RuntimeException, IOException {
+        if (!userRepository.existsByEmail(user.getEmail()))
+            throw new RuntimeException("El usuario no existe");
+        user.setName(name);
+        user.setBio(bio);
+        user.setProfilePicture(profilePicture.getBytes());
+        return userRepository.save(user);
     }
 
     @Override
@@ -48,6 +52,11 @@ public class UserService implements UserDetailsService {
     public User getUserByUsername(String username) {
         return userRepository.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
+    }
+
+    public User getUserById(Integer id) {
+        return userRepository.findById(id)
+                .orElse(null);
     }
     
 }

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Your Profile - Finder</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<header class="header">
+    <h1 th:if="${!otherUser}">Your Profile</h1>
+    <h1 th:if="${otherUser}" th:text="${user.name + '''s Profile'}"></h1>
+</header>
+<main class="profile-app">
+    <div class="profile-container">
+        <div class="profile-card">
+            <img th:src="@{'data:image/jpeg;base64,' + ${user.profilePictureBase64}}" alt="Profile Picture" class="profile-img">
+            <div class="profile-info">
+                <h2 th:text="${user.name}"></h2>
+                <p class="profile-bio" th:text="${user.bio}"></p>
+                <span th:if="${!otherUser}">
+                    <button class="btn edit-profile" onclick="location.href='profile?edit'">
+                        <i class="fa-solid fa-edit"></i> Edit Profile
+                    </button>
+                    <button type="button" class="btn logout-btn" onclick="window.location.href='logout';">
+                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
+</main>
+<nav class="bottom-nav">
+    <a href="home" class="nav-item"><i class="fa-solid fa-house"></i> Home</a>
+    <a href="matches" class="nav-item"><i class="fa-solid fa-comments"></i> Matches</a>
+    <a th:if="${!otherUser}" href="profile" class="nav-item active"><i class="fa-solid fa-user"></i> Profile</a>
+    <a th:if="${otherUser}" href="profile" class="nav-item"><i class="fa-solid fa-user"></i> Profile</a>
+</nav>
+</body>
+</html>

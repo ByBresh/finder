@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Register - Finder</title>
     <link href="https://fonts.googleapis.com/css?family=Poppins:400,600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-    <!-- Font Awesome for icons (optional) -->
+    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
@@ -16,7 +15,7 @@
 <main class="auth-app">
     <div class="auth-card">
         <h2>Register</h2>
-        <form class="auth-form">
+        <form id="auth-form" class="auth-form" onsubmit="return goToStep2(event)">
             <label for="email">Email</label>
             <input type="email" id="email" placeholder="Your email" required>
 
@@ -25,8 +24,23 @@
 
             <button type="submit" class="btn auth-btn">Register</button>
         </form>
-        <p class="auth-link">Already have an account? <a href="login.html">Login</a></p>
+        <p class="auth-link">Already have an account? <a href="login">Login</a></p>
     </div>
 </main>
 </body>
+<script>
+    function goToStep2(event) {
+        event.preventDefault();
+        const form = document.getElementById('auth-form');
+        if (form.checkValidity()) {
+            localStorage.setItem('email', document.getElementById('email').value);
+            localStorage.setItem('password', document.getElementById('password').value);
+            window.location.href = 'register?step2';
+            return false;
+        } else {
+            form.reportValidity();
+            return false;
+        }
+    }
+</script>
 </html>

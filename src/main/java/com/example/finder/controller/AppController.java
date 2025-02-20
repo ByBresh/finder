@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 @Controller
-@RequestMapping("/app")
+@RequestMapping("")
 public class AppController {
 
     @Autowired
@@ -40,6 +40,39 @@ public class AppController {
         model.addAttribute("matches", matches);
         model.addAttribute("selectedMatch", selectedMatch);
         return "matches";
+    }
+
+    @GetMapping("/register")
+    public String register(@RequestParam(value = "step2", required = false) String step2, Model model, Authentication authentication) {
+
+        if (step2 != null) {
+            return "register-part2";
+        } else {
+            return "register-part1";
+        }
+    }
+
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
+    @GetMapping("/profile")
+    public String profile(@RequestParam(value = "edit", required = false) String edit, @RequestParam(value = "id", required = false) Integer id, Model model, Authentication authentication) {
+        User user;
+        if (id != null && userService.getUserById(id) != null) {
+            user = userService.getUserById(id);
+            model.addAttribute("otherUser", true);
+        } else {
+            user = userService.getUserByUsername(authentication.getName());
+            model.addAttribute("otherUser", false);
+        }
+        model.addAttribute("user", user);
+        if (edit != null) {
+            return "edit-profile";
+        } else {
+            return "profile";
+        }
     }
 
 }

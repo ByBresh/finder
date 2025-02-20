@@ -2,6 +2,7 @@ package com.example.finder.model;
 
 import jakarta.persistence.*;
 
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -18,7 +19,7 @@ public class User {
     private String name;
 
     @Column(nullable = false, columnDefinition = "TEXT")
-    private String description;
+    private String bio;
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -66,9 +67,15 @@ public class User {
         return allMatches;
     }
 
-    public User(String name, String email, String password, byte[] profilePicture) {
+    @Transient
+    public String getProfilePictureBase64() {
+        return Base64.getEncoder().encodeToString(profilePicture);
+    }
+
+    public User(String name, String email, String bio, String password, byte[] profilePicture) {
         this.name = name;
         this.email = email;
+        this.bio = bio;
         this.password = password;
         this.profilePicture = profilePicture;
     }
@@ -92,12 +99,12 @@ public class User {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
+    public String getBio() {
+        return bio;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setBio(String bio) {
+        this.bio = bio;
     }
 
     public String getEmail() {

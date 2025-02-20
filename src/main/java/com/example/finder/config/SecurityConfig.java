@@ -17,15 +17,15 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authz -> authz
                         // Rutas públicas: login, registro y recursos estáticos
-                        .requestMatchers("/", "/index.html", "/register.html", "/login.html", "/api/auth/**", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/", "/index.html", "/register", "/login", "/api/auth/**", "/css/**", "/js/**").permitAll()
                         // El resto requiere autenticación
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         // Página de login personalizada (se muestra cuando el usuario no está autenticado)
-                        .loginPage("/login.html")
+                        .loginPage("/login")
                         // URL a la que se envían las credenciales (debe coincidir con el atributo action del formulario)
-                        .loginProcessingUrl("/login")
+                        .loginProcessingUrl("/api/auth/login")
                         // Si el login es exitoso, redirige a bienvenido.html
                         .defaultSuccessUrl("/bienvenido.html", false)
                         .permitAll()

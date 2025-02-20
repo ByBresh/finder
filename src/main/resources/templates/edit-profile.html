@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Edit Profile - Finder</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<header class="header">
+    <h1>Your Profile</h1>
+</header>
+<main class="auth-app">
+    <div class="auth-card">
+        <h2>Edit Your Profile</h2>
+        <form class="auth-form">
+            <label for="profile-pic">Profile Picture</label>
+            <img id="image-preview" th:src="@{'data:image/jpeg;base64,' + ${user.profilePictureBase64}}" alt="Image Preview" style="max-width: 100%; height: auto; border-radius: 10px">
+            <input type="file" id="profile-pic" accept="image/jpeg">
+
+            <label for="name">Name</label>
+            <input type="text" id="name" placeholder="Your name" th:value="${user.name}" required>
+
+            <label for="bio">Bio</label>
+            <textarea id="bio" placeholder="Tell us about yourself..." th:text="${user.bio}"></textarea>
+
+            <button type="submit" class="btn auth-btn">Save Changes</button>
+
+            <button type="button" class="btn cancel-btn" onclick="window.location.href='profile';">Cancel</button>        </form>
+    </div>
+</main>
+</body>
+<script>
+    // Show existing profile picture on page load
+    window.addEventListener('load', function() {
+        const imgElement = document.getElementById('image-preview');
+        if (imgElement.src) {
+            imgElement.style.display = 'block';
+        }
+    });
+
+    // Change profile picture preview
+    document.getElementById('profile-pic').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const imgElement = document.getElementById('image-preview');
+                imgElement.src = event.target.result;
+                imgElement.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Handle form submission
+    document.querySelector('.auth-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const formData = new FormData();
+        formData.append('name', document.getElementById('name').value);
+        formData.append('bio', document.getElementById('bio').value);
+        formData.append('profilePicture', document.getElementById('profile-pic').files[0]);
+
+        fetch('/api/edit-profile', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (response.ok) {
+                localStorage.removeItem('email');
+                localStorage.removeItem('password');
+                window.location.href = '/profile';
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+</script>
+</html>

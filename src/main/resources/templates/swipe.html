@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Swipe - Finder</title>
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<header class="header">
+  <h1>Finder</h1>
+</header>
+<main th:if="${user != null}" class="main-app">
+  <div class="card-container">
+    <div class="card">
+      <img th:src="@{'data:image/jpeg;base64,' + ${user.profilePictureBase64}}" alt="Profile Image">
+      <div class="card-info">
+        <h2 th:text="${user.name}"></h2>
+        <p th:text="${user.bio}"></p>
+      </div>
+    </div>
+  </div>
+  <div class="swipe-buttons">
+    <button class="btn dislike"><i class="fas fa-times"></i></button>
+    <button class="btn like"><i class="fas fa-heart"></i></button>
+  </div>
+</main>
+<main th:if="${user == null}" class="main-app">
+  <div class="card-container">
+    <div class="card">
+      <div class="card-info">
+        <h2>No users found</h2>
+      </div>
+    </div>
+  </div>
+</main>
+<nav class="bottom-nav">
+  <a href="swipe" class="nav-item active"><i class="fa-solid fa-house"></i> Swipe</a>
+  <a href="matches" class="nav-item"><i class="fa-solid fa-comments"></i> Matches</a>
+  <a href="profile" class="nav-item"><i class="fa-solid fa-user"></i> Profile</a>
+</nav>
+</body>
+<script th:inline="javascript">
+  document.addEventListener('DOMContentLoaded', function() {
+      const likeButton = document.querySelector('.like');
+      const dislikeButton = document.querySelector('.dislike');
+      const user = /*[[${user}]]*/ null;
+
+      if (likeButton && user) {
+          likeButton.addEventListener('click', async () => {
+              try {
+                  const response = await fetch(`/api/like?id=${user.id}`, {
+                      method: 'POST'
+                  });
+                  if (response.ok) {
+                      window.location.reload();
+                  }
+              } catch (error) {
+                  console.error('Error:', error);
+              }
+          });
+      }
+
+      if (dislikeButton && user) {
+          dislikeButton.addEventListener('click', async () => {
+              try {
+                  const response = await fetch(`/api/dislike?id=${user.id}`, {
+                      method: 'POST'
+                  });
+                  if (response.ok) {
+                      window.location.reload();
+                  }
+              } catch (error) {
+                  console.error('Error:', error);
+              }
+          });
+      }
+  });
+</script>
+</html>

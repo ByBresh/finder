@@ -57,6 +57,13 @@ public class AppController {
         return "login";
     }
 
+    @GetMapping("/swipe")
+    public String swipe(Model model, Authentication authentication) {
+        User user = userService.getRandomUser(userService.getUserByUsername(authentication.getName()));
+        model.addAttribute("user", user);
+        return "swipe";
+    }
+
     @GetMapping("/profile")
     public String profile(@RequestParam(value = "edit", required = false) String edit, @RequestParam(value = "id", required = false) Integer id, Model model, Authentication authentication) {
         User user;

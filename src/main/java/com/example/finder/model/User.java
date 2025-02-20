@@ -1,5 +1,6 @@
 package com.example.finder.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Base64;
@@ -31,6 +32,7 @@ public class User {
     @Column(name = "profile_picture", columnDefinition = "LONGBLOB", nullable = false)
     private byte[] profilePicture;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "user_likes",
@@ -39,9 +41,11 @@ public class User {
     )
     private Set<User> likedUsers = new HashSet<>();
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "likedUsers")
     private Set<User> likedByUsers = new HashSet<>();
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "user_dislikes",
@@ -50,6 +54,7 @@ public class User {
     )
     private Set<User> dislikedUsers = new HashSet<>();
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "dislikedUsers")
     private Set<User> dislikedByUsers = new HashSet<>();
 

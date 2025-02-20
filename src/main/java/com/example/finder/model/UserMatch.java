@@ -35,12 +35,17 @@ public class UserMatch {
         return user.equals(user1) ? user2 : user1;
     }
 
-    public UserMatch(User user1, User user2) {
-        this.id = new UserMatchId(user1.getId(), user2.getId());
-        this.user1 = user1;
-        this.user2 = user2;
-    }
+    public UserMatch(User userA, User userB) {
+        if (userA.getId() < userB.getId()) {
+            this.user1 = userA;
+            this.user2 = userB;
+        } else {
+            this.user1 = userB;
+            this.user2 = userA;
+        }
 
+        this.id = new UserMatchId(this.user1.getId(), this.user2.getId());
+    }
     public UserMatch() {
     }
 

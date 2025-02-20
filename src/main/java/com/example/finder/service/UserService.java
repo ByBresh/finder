@@ -58,5 +58,10 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(id)
                 .orElse(null);
     }
+
+    public User getRandomUser(User user) {
+        return userRepository.findFirstRandomUserNotInLikesOrDislikes(user.getId())
+                .orElse(null);
+    }
     
 }

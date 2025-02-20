@@ -21,10 +21,16 @@ public class ApiController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/like")
+    @PostMapping("/like")
     public ResponseEntity<?> like(@RequestParam Integer id, Authentication authentication) {
         String response = likeService.like(userService.getUserByUsername(authentication.getName()).getEmail(), id).orElse("Usuario liked");
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/dislike")
+    public ResponseEntity<?> dislike(@RequestParam Integer id, Authentication authentication) {
+        likeService.dislike(userService.getUserByUsername(authentication.getName()).getEmail(), id);
+        return ResponseEntity.ok("Usuario disliked");
     }
 
     @PostMapping(value= "/edit-profile", consumes = "multipart/form-data")
@@ -36,7 +42,7 @@ public class ApiController {
     ) {
         try {
             User user = userService.getUserByUsername(authentication.getName());
-            userService.editUser(user, name, bio, profilePicture);
+            user = userService.editUser(user, name, bio, profilePicture);
             return ResponseEntity.ok("Perfil actualizado.");
         } catch (RuntimeException | IOException e) {
             return ResponseEntity.badRequest().body(e.getMessage());

@@ -3,21 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Matches</title>
-    <!-- Usamos Google Fonts para un look moderno -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>Matches - Finder</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-<div th:if="${selectedMatch} != null" class="container">
-    <h2>Chat</h2>
-    <form method="post" action="">
-        <input type="text" name="message" placeholder="Di algo!" required>
-        <input type="hidden" name="matchId" th:value="${selectedMatch.id}" required>
-        <button type="submit">Enviar</button>
-    </form>
-</div>
-
+<header class="header">
+    <h1>Your Matches</h1>
+</header>
+<main th:if="${matches != null}" class="matches-app">
+    <div th:if="${user.pendingMatch}" class="match-popup" id="matchPopup">
+        <div class="match-popup-content">
+            <h2>New Match!</h2>
+            <p>You have a new match waiting for you!</p>
+            <button onclick="closeMatchPopup()">OK</button>
+        </div>
+    </div>
+    <section class="matches-grid">
+        <h2>Matches</h2>
+        <div class="matches-list">
+            <div th:each="match : ${matches}" class="match">
+                <a th:href="@{'matches?id=' + ${match.getOtherUser(user).id}}">
+                    <img th:src="@{'data:image/jpeg;base64,' + ${match.getOtherUser(user).profilePictureBase64}}"
+                         alt="Profile Picture">
+                </a>
+                <span th:text="${match.getOtherUser(user).name}"></span>
+            </div>
+        </div>
+    </section>
+    <section class="chat-section">
+        <div class="chat-window">
+            <div class="chat-header">
+                <h3 th:text="${'Chat with ' + selectedMatch.getOtherUser(user).name}"></h3>
+                <a th:href="@{'/profile?id=' + ${selectedMatch.getOtherUser(user).id}}" class="profile-link">
+                    <button class="profile-btn"><i class="fa-solid fa-user"></i> View Profile</button>
+                </a>
+            </div>
+            <div class="chat-messages">
+                <div th:each="message : ${selectedMatch.getOrderedMessages()}"
+                    th:class="${message.sender.equals(user) ? 'message sent' : 'message received'}"
+                    th:text="${message.messageText}"></div>
+            </div>
+            <form class="chat-input" id="messageForm" autocomplete="off">
+                <input type="text" id="messageText" placeholder="Type a message" required>
+                <button type="submit"><i class="fas fa-paper-plane"></i></button>
+            </form>
+        </div>
+    </section>
+</main>
+<main th:if="${matches == null}" class="main-app">
+    <div class="card-container">
+        <div class="card">
+            <div class="card-info">
+                <h2>No matches</h2>
+            </div>
+        </div>
+    </div>
+</main>
+<nav class="bottom-nav">
+    <a href="swipe" class="nav-item"><i class="fa-solid fa-house"></i> Swipe</a>
+    <a href="matches" class="nav-item active"><i class="fa-solid fa-comments"></i> Matches</a>
+    <a href="profile" class="nav-item"><i class="fa-solid fa-user"></i> Profile</a>
+</nav>
 </body>
+<script th:if="${selectedMatch != null}" th:inline="javascript">
+    document.getElementById('messageForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(this);
+        formData.append('id', /*[[${selectedMatch.getOtherUser(user).id}]]*/);
+        formData.append('messageText', document.getElementById('messageText').value);
+
+        fetch(`/api/send-message`, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => {
+            if (response.ok) {
+                // Refresh the page to show new message
+                window.location.reload();
+            }
+        })
+        .catch(error => console.error('Error:', error));
+
+        // Clear input field
+        this.reset();
+    });
+    function closeMatchPopup() {
+        const popup = document.getElementById('matchPopup');
+        if (popup) {
+            popup.style.display = 'none';
+
+            // Reset pending match flag
+            fetch('/api/reset-pending-match', {
+                method: 'POST'
+            }).catch(error => console.error('Error:', error));
+        }
+    }
+</script>
 </html>

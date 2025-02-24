@@ -1,12 +1,13 @@
 package com.example.finder.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.deser.DataFormatReaders;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Entity
 @Table(name = "user_matches")
@@ -15,11 +16,13 @@ public class UserMatch {
     @EmbeddedId
     private UserMatchId id;
 
+    @JsonIgnore
     @ManyToOne
     @MapsId("user1Id")
     @JoinColumn(name = "user1_id")
     private User user1;
 
+    @JsonIgnore
     @ManyToOne
     @MapsId("user2Id")
     @JoinColumn(name = "user2_id")
@@ -28,8 +31,9 @@ public class UserMatch {
     @Column(name = "matched_at", nullable = false)
     private Timestamp matchedAt = Timestamp.valueOf(LocalDateTime.now());
 
+    @JsonIgnore
     @OneToMany(mappedBy = "userMatch", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<MatchMessage> messages = new ArrayList<>();
+    private Set<MatchMessage> messages = new HashSet<>();
 
     public User getOtherUser(User user) {
         return user.equals(user1) ? user2 : user1;
@@ -81,12 +85,18 @@ public class UserMatch {
         this.matchedAt = matchedAt;
     }
 
-    public List<MatchMessage> getMessages() {
+    public Set<MatchMessage> getMessages() {
         return messages;
     }
 
-    public void setMessages(List<MatchMessage> messages) {
+    public void setMessages(Set<MatchMessage> messages) {
         this.messages = messages;
+    }
+
+    public List<MatchMessage> getOrderedMessages() {
+        List<MatchMessage> orderedMessages = new ArrayList<>(messages);
+        orderedMessages.sort(Comparator.comparing(MatchMessage::getSentAt));
+        return orderedMessages;
     }
 
     @Override

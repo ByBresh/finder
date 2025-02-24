@@ -36,8 +36,16 @@
     // Show existing profile picture on page load
     window.addEventListener('load', function() {
         const imgElement = document.getElementById('image-preview');
+        const profilePicInput = document.getElementById('profile-pic');
+
         if (imgElement.src) {
             imgElement.style.display = 'block';
+            fetch(imgElement.src)
+                .then(res => res.blob())
+                .then(blob => {
+                    const file = new File([blob], 'profile.jpg', { type: 'image/jpeg' });
+                    profilePicInput.files = new FileList([file], 'profile.jpg');
+                });
         }
     });
 

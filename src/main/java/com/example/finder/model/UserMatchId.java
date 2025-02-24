@@ -36,14 +36,6 @@ public class UserMatchId implements Serializable {
         this.user1Id = user1Id;
     }
 
-    public Integer getUser2Id() {
-        return user2Id;
-    }
-
-    public void setUser2Id(Integer user2Id) {
-        this.user2Id = user2Id;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

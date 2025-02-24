@@ -14,6 +14,13 @@
     <h1 th:if="${otherUser}" th:text="${user.name + '''s Profile'}"></h1>
 </header>
 <main class="profile-app">
+    <div th:if="${user.pendingMatch && !otherUser}" class="match-popup" id="matchPopup">
+        <div class="match-popup-content">
+            <h2>New Match!</h2>
+            <p>You have a new match waiting for you!</p>
+            <button onclick="closeMatchPopup()">OK</button>
+        </div>
+    </div>
     <div class="profile-container">
         <div class="profile-card">
             <img th:src="@{'data:image/jpeg;base64,' + ${user.profilePictureBase64}}" alt="Profile Picture" class="profile-img">
@@ -39,4 +46,17 @@
     <a th:if="${otherUser}" href="profile" class="nav-item"><i class="fa-solid fa-user"></i> Profile</a>
 </nav>
 </body>
+<script th:if="${!otherUser}">
+    function closeMatchPopup() {
+        const popup = document.getElementById('matchPopup');
+        if (popup) {
+            popup.style.display = 'none';
+
+            // Reset pending match flag
+            fetch('/api/reset-pending-match', {
+                method: 'POST'
+            }).catch(error => console.error('Error:', error));
+        }
+    }
+</script>
 </html>

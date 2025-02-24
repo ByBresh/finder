@@ -13,6 +13,13 @@
   <h1>Finder</h1>
 </header>
 <main th:if="${user != null}" class="main-app">
+  <div th:if="${currentUser.pendingMatch}" class="match-popup" id="matchPopup">
+    <div class="match-popup-content">
+      <h2>New Match!</h2>
+      <p>You have a new match waiting for you!</p>
+      <button onclick="closeMatchPopup()">OK</button>
+    </div>
+  </div>
   <div class="card-container">
     <div class="card">
       <img th:src="@{'data:image/jpeg;base64,' + ${user.profilePictureBase64}}" alt="Profile Image">
@@ -28,6 +35,13 @@
   </div>
 </main>
 <main th:if="${user == null}" class="main-app">
+  <div th:if="${currentUser.pendingMatch}" class="match-popup" id="matchPopup">
+    <div class="match-popup-content">
+      <h2>New Match!</h2>
+      <p>You have a new match waiting for you!</p>
+      <button onclick="closeMatchPopup()">OK</button>
+    </div>
+  </div>
   <div class="card-container">
     <div class="card">
       <div class="card-info">
@@ -78,5 +92,16 @@
           });
       }
   });
+    function closeMatchPopup() {
+        const popup = document.getElementById('matchPopup');
+        if (popup) {
+            popup.style.display = 'none';
+
+            // Reset pending match flag
+            fetch('/api/reset-pending-match', {
+                method: 'POST'
+            }).catch(error => console.error('Error:', error));
+        }
+    }
 </script>
 </html>

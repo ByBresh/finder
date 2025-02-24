@@ -1,12 +1,16 @@
 package com.example.finder.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.Base64;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Entity
 @Table(name = "users")
@@ -31,6 +35,9 @@ public class User {
     @Lob
     @Column(name = "profile_picture", columnDefinition = "LONGBLOB", nullable = false)
     private byte[] profilePicture;
+
+    @Column(name = "pending_match", columnDefinition = "BOOLEAN DEFAULT FALSE", nullable = false)
+    private Boolean pendingMatch = false;
 
     @JsonIgnore
     @ManyToMany
@@ -58,18 +65,27 @@ public class User {
     @ManyToMany(mappedBy = "dislikedUsers")
     private Set<User> dislikedByUsers = new HashSet<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user1", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserMatch> matchesUser1 = new HashSet<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user2", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserMatch> matchesUser2 = new HashSet<>();
 
+    @JsonIgnore
     @Transient
     public Set<UserMatch> getAllMatches() {
         Set<UserMatch> allMatches = new HashSet<>();
         allMatches.addAll(matchesUser1);
         allMatches.addAll(matchesUser2);
         return allMatches;
+    }
+
+    @JsonIgnore
+    @Transient
+    public Set<User> getAllMatchedUsers() {
+        return getAllMatches().stream().map(match -> match.getOtherUser(this)).collect(Collectors.toSet());
     }
 
     @Transient
@@ -86,6 +102,10 @@ public class User {
     }
 
     public User() {
+    }
+
+    public User(Integer id) {
+        this.id = id;
     }
 
     public Integer getId() {
@@ -134,6 +154,14 @@ public class User {
 
     public void setProfilePicture(byte[] profilePicture) {
         this.profilePicture = profilePicture;
+    }
+
+    public Boolean getPendingMatch() {
+        return pendingMatch;
+    }
+
+    public void setPendingMatch(Boolean pendingMatch) {
+        this.pendingMatch = pendingMatch;
     }
 
     public Set<User> getLikedUsers() {

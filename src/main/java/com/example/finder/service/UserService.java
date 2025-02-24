@@ -2,6 +2,7 @@ package com.example.finder.service;
 
 import com.example.finder.dao.UserRepository;
 import com.example.finder.model.User;
+import com.example.finder.model.UserMatch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -28,12 +29,12 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
-    public User editUser(User user, String name, String bio, MultipartFile profilePicture) throws RuntimeException, IOException {
+    public User editUser(User user, String name, String bio, byte[] profilePicture) throws RuntimeException, IOException {
         if (!userRepository.existsByEmail(user.getEmail()))
             throw new RuntimeException("El usuario no existe");
         user.setName(name);
         user.setBio(bio);
-        user.setProfilePicture(profilePicture.getBytes());
+        user.setProfilePicture(profilePicture);
         return userRepository.save(user);
     }
 
@@ -63,5 +64,9 @@ public class UserService implements UserDetailsService {
         return userRepository.findFirstRandomUserNotInLikesOrDislikes(user.getId())
                 .orElse(null);
     }
-    
+
+    public void resetPendingMatch(User user) {
+        user.setPendingMatch(false);
+        userRepository.save(user);
+    }
 }

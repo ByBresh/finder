@@ -21,25 +21,11 @@ public class AppController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/likes")
-    public String likes(Model model, Authentication authentication) {
-        Set<User> likedUsers = userService.getUserByUsername(authentication.getName()).getLikedUsers();
-        model.addAttribute("likedUsers", likedUsers);
-        return "likedUsers";
-    }
+    @GetMapping("/")
+    public String index (Model model, Authentication authentication) {
+        return "index";
 
-    @GetMapping("/matches")
-    public String matches(Model model, Authentication authentication, @RequestParam(required = false) String selectedUserId) {
-        User user = userService.getUserByUsername(authentication.getName());
-        Set<UserMatch> matches = userService.getUserByUsername(authentication.getName()).getAllMatches();
-        UserMatch selectedMatch = null;
-        if (selectedUserId != null) {
-            List<UserMatch> selectedMatchList = matches.stream().filter(match -> selectedUserId.equals(String.valueOf(match.getOtherUser(user).getId()))).toList();
-            selectedMatch = selectedMatchList.isEmpty() ? null : selectedMatchList.getFirst();
-        }
-        model.addAttribute("matches", matches);
-        model.addAttribute("selectedMatch", selectedMatch);
-        return "matches";
+
     }
 
     @GetMapping("/register")
@@ -61,8 +47,31 @@ public class AppController {
     public String swipe(Model model, Authentication authentication) {
         User user = userService.getRandomUser(userService.getUserByUsername(authentication.getName()));
         model.addAttribute("user", user);
+        User currentUser = userService.getUserByUsername(authentication.getName());
+        model.addAttribute("currentUser", currentUser);
         return "swipe";
     }
+
+    @GetMapping("/matches")
+    public String matches(@RequestParam(value = "id", required = false) final Integer id, Model model, Authentication authentication) {
+        User user = userService.getUserByUsername(authentication.getName());
+        Set<UserMatch> matches = user.getAllMatches().isEmpty() ? null : user.getAllMatches();
+        UserMatch selectedMatch;
+        model.addAttribute("user", user);
+        model.addAttribute("matches", matches);
+        if (matches == null) {
+            selectedMatch = null;
+        } else if (id == null) {
+            selectedMatch = matches.iterator().next();
+        } else if (matches.contains(new UserMatch(user, new User(id)))) {
+            selectedMatch = matches.stream().filter(match -> match.getOtherUser(user).getId().equals(id)).findFirst().get();
+        } else {
+            selectedMatch = matches.iterator().next();
+        }
+        model.addAttribute("selectedMatch", selectedMatch);
+        return "matches";
+    }
+
 
     @GetMapping("/profile")
     public String profile(@RequestParam(value = "edit", required = false) String edit, @RequestParam(value = "id", required = false) Integer id, Model model, Authentication authentication) {
@@ -70,15 +79,17 @@ public class AppController {
         if (id != null && userService.getUserById(id) != null) {
             user = userService.getUserById(id);
             model.addAttribute("otherUser", true);
+            model.addAttribute("user", user);
+            return "profile";
         } else {
             user = userService.getUserByUsername(authentication.getName());
             model.addAttribute("otherUser", false);
-        }
-        model.addAttribute("user", user);
-        if (edit != null) {
-            return "edit-profile";
-        } else {
-            return "profile";
+            model.addAttribute("user", user);
+            if (edit != null) {
+                return "edit-profile";
+            } else {
+                return "profile";
+            }
         }
     }
 

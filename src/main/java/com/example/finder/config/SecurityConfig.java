@@ -17,7 +17,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authz -> authz
                         // Rutas públicas: login, registro y recursos estáticos
-                        .requestMatchers("/", "/index.html", "/register", "/login", "/api/auth/**", "/css/**", "/js/**").permitAll()
+                        .requestMatchers("/", "/register", "/login", "/api/auth/**", "/css/**", "/js/**").permitAll()
                         // El resto requiere autenticación
                         .anyRequest().authenticated()
                 )
@@ -27,12 +27,12 @@ public class SecurityConfig {
                         // URL a la que se envían las credenciales (debe coincidir con el atributo action del formulario)
                         .loginProcessingUrl("/api/auth/login")
                         // Si el login es exitoso, redirige a bienvenido.html
-                        .defaultSuccessUrl("/bienvenido.html", false)
+                        .defaultSuccessUrl("/swipe", true)
                         .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/index.html")
+                        .logoutSuccessUrl("/")
                         .permitAll()
                 );
         return http.build();    }

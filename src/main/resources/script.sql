@@ -9,7 +9,8 @@ CREATE TABLE users (
     bio TEXT NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    profile_picture LONGBLOB NOT NULL
+    profile_picture LONGBLOB NOT NULL,
+    pending_match BOOLEAN NOT NULL DEFAULT false
 );
 
 CREATE TABLE user_likes (

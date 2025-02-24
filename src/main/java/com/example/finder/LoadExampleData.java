@@ -25,11 +25,11 @@ public class LoadExampleData {
         List<User> users = List.of();
         try {
             users = List.of(
-                new User("Alice", "alice@example.com", "hola", "1234", Files.readAllBytes(Path.of("src/main/resources/demo/images/alice.jpg"))),
-                new User("Bob", "bob@example.com", "hola", "1234", Files.readAllBytes(Path.of("src/main/resources/demo/images/bob.jpg"))),
-                new User("Charlie", "charlie@example.com", "hola", "1234", Files.readAllBytes(Path.of("src/main/resources/demo/images/charlie.jpg"))),
-                new User("Dana", "dana@example.com", "hola", "1234", Files.readAllBytes(Path.of("src/main/resources/demo/images/dana.jpg"))),
-                new User("Eve", "eve@example.com", "hola", "1234", Files.readAllBytes(Path.of("src/main/resources/demo/images/eve.jpg")))
+                new User("Alice", "alice@example.com", "Holaaaa :>>>>>>", "1234", Files.readAllBytes(Path.of("src/main/resources/demo/images/alice.jpg"))),
+                new User("Bob", "bob@example.com", "Ola soy bob", "1234", Files.readAllBytes(Path.of("src/main/resources/demo/images/bob.jpg"))),
+                new User("Charlie", "charlie@example.com", "Me gusta charlar", "1234", Files.readAllBytes(Path.of("src/main/resources/demo/images/charlie.jpg"))),
+                new User("Dana", "dana@example.com", "Hola caracola", "1234", Files.readAllBytes(Path.of("src/main/resources/demo/images/dana.jpg"))),
+                new User("Eve", "eve@example.com", "Heyyyyy", "1234", Files.readAllBytes(Path.of("src/main/resources/demo/images/eve.jpg")))
             );
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -25,13 +25,13 @@ public class ApiController {
     private UserService userService;
 
     @PostMapping("/like")
-    public ResponseEntity<?> like(@RequestParam Integer id, Authentication authentication) {
+    public synchronized ResponseEntity<?> like(@RequestParam Integer id, Authentication authentication) {
         String response = likeService.like(userService.getUserByUsername(authentication.getName()).getEmail(), id).orElse("Usuario liked");
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/dislike")
-    public ResponseEntity<?> dislike(@RequestParam Integer id, Authentication authentication) {
+    public synchronized ResponseEntity<?> dislike(@RequestParam Integer id, Authentication authentication) {
         likeService.dislike(userService.getUserByUsername(authentication.getName()).getEmail(), id);
         return ResponseEntity.ok("Usuario disliked");
     }

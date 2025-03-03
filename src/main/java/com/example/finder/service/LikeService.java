@@ -22,7 +22,7 @@ public class LikeService {
     private UserMatchRepository userMatchRepository;
 
     @Transactional
-    public Optional<String> like(String username, Integer id) {
+    public synchronized Optional<String> like(String username, Integer id) {
         Optional<String> response = Optional.empty();
         User user = userRepository.findByEmail(username).orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + username));
         User likedUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + id));
